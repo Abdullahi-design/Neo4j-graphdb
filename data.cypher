@@ -1,9 +1,9 @@
 CREATE 
-(john:PLAYER {name:"John Doe", business: "CEO of Google", location: "Nigeria"}),
-(anna:PLAYER {name:"Anna Doe", business: "CCO of Google", location: "Nigeria"}),
-(joseph:PLAYER {name:"Joseph Doe", business: "CTO of Google", location: "Nigeria"}),
-(step:PLAYER {name:"Step Doe", business: "Co-founder of Google", location: "Nigeria"}),
-(alice:PLAYER {name:"Alice Doe", business: "CFO of Google", location: "Nigeria"})
+(john:PERSON {name:"John Doe", business: "CEO of Google", location: "Nigeria"}),
+(anna:PERSON {name:"Anna Doe", business: "CCO of Google", location: "Nigeria"}),
+(joseph:PERSON {name:"Joseph Doe", business: "CTO of Google", location: "Nigeria"}),
+(step:PERSON {name:"Step Doe", business: "Co-founder of Google", location: "Nigeria"}),
+(alice:PERSON {name:"Alice Doe", business: "CFO of Google", location: "Nigeria"})
 
 CREATE
 (john)-[:CLIENT {lastContacted: "12 Jan 2023"}]->(anna),
