@@ -1,0 +1,24 @@
+{
+  "name": "neo4j",
+  "version": "1.0.0",
+  "description": "*Run the entire graph* MATCH (n:PERSON) RETURN (n)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abdullahi-design/Neo4j-graphdb.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Abdullahi-design/Neo4j-graphdb/issues"
+  },
+  "homepage": "https://github.com/Abdullahi-design/Neo4j-graphdb#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "neo4j-driver": "^5.10.0"
+  }
+}
