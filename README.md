@@ -14,3 +14,23 @@ DETACH DELETE abdul
 MATCH (abdul:PERSON {name: 'Abdul Sani'})-[client:CLIENT]->(john:PERSON {name: 'John Doe'})
 SET client.howDidYouMeet = 'linkedin'
 RETURN abdul, client, john
+
+*Create with multiple connections*
+{
+  "name": "Jasswinder",
+  "fullName": "Jasswinder Singh",
+  "business": "CO-founder of Harmonic",
+  "location": "India",
+  "friends": [
+    {
+      "name": "Abdullahi Sani",
+      "lastContacted": "2023-06-30",
+      "howDidYouMeet": "High School"
+    },
+    {
+      "name": "Quinton Armitage",
+      "lastContacted": "2023-06-30",
+      "howDidYouMeet": "Conference"
+    }
+  ]
+}
