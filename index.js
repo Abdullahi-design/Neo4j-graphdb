@@ -1,5 +1,11 @@
+const express = require('express');
 const neo4j = require('neo4j-driver');
-require('dotenv').config()
+require('dotenv').config();
+
+const app = express();
+const port = 8080;
+
+app.use(express.json());
 
 const password = process.env.GENERATED_PASSWORD;
 const url = process.env.CONNECTION_URI;
@@ -7,44 +13,66 @@ const url = process.env.CONNECTION_URI;
 // Create a Neo4j driver instance
 const driver = neo4j.driver(`${url}`, neo4j.auth.basic('neo4j', `${password}`));
 
-// Create a session to interact with the database
-const session = driver.session();
+app.post('/users', (req, res) => {
+  const { 
+    name,
+    fullName,
+    business,
+    location,
+    connectionName,
+    connectionFullName,
+    connectionlastContacted,
+    howDidYouMeet
+   } = req.body;
 
-// Define your query and parameters
-const query = `
-  CREATE (abdul:PERSON {name: $name, business: $business, location: $location})
-  WITH abdul
-  MATCH (john:PERSON {name: 'John Doe'}), (step:PERSON {name: 'Step Doe'})
-  CREATE (abdul)-[:CLIENT {lastContacted: $johnLastContacted}]->(john),
-    (abdul)-[:CLIENT {lastContacted: $stepLastContacted}]->(step)
-  RETURN abdul
+  // Create a session to interact with the database
+  const session = driver.session();
+
+  // Define your query and parameters
+  const query = `
+  CREATE (person:PERSON {name: $fullName, business: $business, location: $location})
+  WITH person
+  MATCH (connection:PERSON {name: $connectionFullName})
+  CREATE (person)-[:CLIENT {lastContacted: $connectionlastContacted, howDidYouMeet: $howDidYouMeet}]->(connection)
+  RETURN person
 `;
-const params = {
-  name: 'Abdul Sani',
-  business: 'Dev at Google',
-  location: 'Nigeria',
-  johnLastContacted: '12 Oct 2023',
-  stepLastContacted: '12 Nov 2023'
-};
 
 
-// Run the query
-session.run(query, params)
-  .then(result => {
-    if (result.records.length > 0) {
-      const abdulNode = result.records[0].get('abdul');
-      console.log('Created node:', abdulNode.properties);
-    } else {
-      console.log('No records returned from the query.');
-    }
+  const params = {
+    name,
+    fullName,
+    business,
+    location,
+    connectionName,
+    connectionFullName,
+    connectionlastContacted,
+    howDidYouMeet
+  };
 
-    // Close the session and driver
-    session.close();
-    driver.close();
-  })
-  .catch(error => {
-    console.error('Error creating node:', error);
-    // Close the session and driver in case of error
-    session.close();
-    driver.close();
-  });
+  // Run the query
+  session
+    .run(query, params)
+    .then((result) => {
+      if (result.records.length > 0) {
+        const abdulNode = result.records[0].get('person');
+        console.log('Created node:', abdulNode.properties);
+        res.status(201).json({ message: 'Node created successfully', node: abdulNode.properties });
+      } else {
+        console.log('No records returned from the query.');
+        res.status(500).json({ error: 'An error occurred while creating the node' });
+      }
+    })
+    .catch((error) => {
+      console.error('Error creating node:', error);
+      res.status(500).json({ error: 'An error occurred while creating the node' });
+    })
+    .finally(() => {
+      // Close the session
+      session.close();
+    });
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
